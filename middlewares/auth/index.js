@@ -6,8 +6,7 @@ const auth = (req, res, next) => {
   let tokenFromBody = null;
 
   if(req.header == null || req.header('authorization') == null) {
-    console.log('Missing headers');
-    next(new Error('Error'));
+    next(new Error('Missing headers'));
     return; 
   }
 

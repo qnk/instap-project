@@ -3,20 +3,20 @@ const customers = [{
   name: "Pepito",
   measures: [{
     date: 123456,
-    value: 25
+    values: [25, 27.2, 28]
   }, {
     date: 654321,
-    value: 30
+    values: [30]
   }]
 },{
   id: 2,
   name: "Ana",
   measures: [{
     date: 123456,
-    value: 11
+    values: []
   }, {
     date: 654321,
-    value: 18
+    values: [18, 24.3]
   }]
 }];
 

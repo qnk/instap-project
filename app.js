@@ -29,8 +29,8 @@ app.use(
   graphqlHttp({
     schema: buildSchema(`
        type RootQuery {
-        Measures(clientId: Int): [String!],
-        Measure(clientId: Int, date: Int): Int!
+        Measures(clientId: Int): [Int!],
+        Measure(clientId: Int, date: Int): [Float!]
       }
       schema {
         query: RootQuery 
@@ -57,7 +57,7 @@ app.use(
         const measures =  customer[0].measures;
         const measure =  _.filter(measures, { date: measureQuery.date })[0];
         
-        return measure.value;
+        return measure.values;
       }
     },
     graphiql: true,
