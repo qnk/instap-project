@@ -1,6 +1,5 @@
 const customers = [{
   id: 1,
-  name: "Pepito",
   measures: [{
     date: 123456,
     values: [25, 27.2, 28]
@@ -10,7 +9,6 @@ const customers = [{
   }]
 },{
   id: 2,
-  name: "Ana",
   measures: [{
     date: 123456,
     values: []
