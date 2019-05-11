@@ -3,7 +3,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const jwt = require('jwt-simple');
+const _ = require('lodash');
+
+const auth = require('./middlewares/auth');
 
 const app = express();
 
@@ -13,96 +15,87 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// const apiRoutes = require('./routes/api')
-app.use((req, res, next) => {
-    req.jwtMiddleware = false;
-
-    next();
-});
-
+const graphqlHttp = require('express-graphql');
+// const graphqlSchema = require('./graphql/schema');
+// const graphqlResolver = require('./graphql/resolvers');
+const { buildSchema } = require('graphql');
 const { graphql, GraphQLSchema, GraphQLObjectType, GraphQLString } = require('graphql');
-   
-const schema = new GraphQLSchema({
-    query: new GraphQLObjectType({
-      name: 'RootQueryType',
-      fields: {
-        hello: {
-          type: GraphQLString,
-          resolve() {
-            return 'world';
-          }
-        }
+
+const customers = require('./data/customers');
+
+app.use(
+  '/graphql',
+  auth,
+  graphqlHttp({
+    schema: buildSchema(`
+       type RootQuery {
+        Measures(clientId: Int): [String!],
+        Measure(clientId: Int, date: Int): Int!
       }
-    })
-  });
+      schema {
+        query: RootQuery 
+      }
+    `),
+    rootValue: {
+      Measures: (clientId) => {
+        const customer = _.filter(customers, { id: clientId.clientId });
 
-  var query = '{ hello }';
- 
-  graphql(schema, query).then(result => {
-   
-    // Prints
-    // {
-    //   data: { hello: "world" }
-    // }
-    console.log(result);
-   
-  });
-
-app.post('/api/v1/login', (req, res, next) => {
-    const [userName, password] = [req.body['user-name'], req.body.password];
-
-    if(userName == null || password == null) {
-        res.status(401);
-        res.json({status:401}); 
-        return;        
-    }
-
-    // Retrieve JWT for user
-    // res.status(200);
-    // res.json({status:200}); 
-    req.tokenFromLogin = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc1Njg5MjcsImV4cCI6MTU4OTEwNDkyNywiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.nIwmdlyhh21hcZiDBejXFzM0CNO7bsg4u-Uu3HWQS3s';;
-    
-    next();
-});
-
-app.use('/api/v1/', (req, res, next) => {
-    const tokenFromBody = null;
-
-    if(req.header('authorization') != null) {
-        const splitted = req.header('authorization').split(" ");
-
-        if(splitted.length > 0) {
-            const length = splitted.length;
-            tokenFromBody = splitted[length - 1];
+        if(customer.length < 1) {
+          return 0;
         }
+
+        const measures =  customer[0].measures;
+        return measures;
+      },
+      Measure: (measureQuery) => {
+        const customer = _.filter(customers, { id: measureQuery.clientId });
+
+        if(customer.length < 1) {
+          return 0;
+        }
+
+        const measures =  customer[0].measures;
+        const measure =  _.filter(measures, { date: measureQuery.date })[0];
+        
+        return measure.value;
+      }
+    },
+    graphiql: true,
+    customFormatErrorFn(err) {
+      if(!err.originalError) {
+        return err;
+      }
+      // MORE LOGIC ABOUT ERROR MANAGEMENT
     }
+  })
+);
 
-    const token = tokenFromBody || req.tokenFromLogin;
+// app.post('/api/v1/login', (req, res, next) => {
+//     const [userName, password] = [req.body['user-name'], req.body.password];
 
-    if(token == null) {
-        res.status(401);
-        res.json({status:401}); 
-        return;            
-    }        
-    console.log(token);
+//     if(userName == null || password == null) {
+//         res.status(401);
+//         res.json({status:401}); 
+//         return;        
+//     }
 
-    // const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc1Njg5MjcsImV4cCI6MTU4OTEwNDkyNywiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.nIwmdlyhh21hcZiDBejXFzM0CNO7bsg4u-Uu3HWQS3s';
-    const secret = 'qwertyuiopasdfghjklzxcvbnm123456';
-    const decoded = jwt.decode(token, secret);
+//     // Retrieve JWT for user --> TO BE DONE?
+//     // res.status(200);
+//     // res.json({status:200}); 
+// });
 
-    /* TODO */
-    // Check if token is out of date and renew it if so.
-
-    res.status(200).send({'jwt': decoded});
-
-    return;
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  res.status(err.status || 401).send();
 });
 
-// app.use((req, res, next) => {
-//     res.status(401);
-//     res.json({"status":401}); 
-//     return;
-//   });
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  res.status(err.status || 401).send();
+});
 
 module.exports = app;
