@@ -20,6 +20,34 @@ app.use((req, res, next) => {
     next();
 });
 
+const { graphql, GraphQLSchema, GraphQLObjectType, GraphQLString } = require('graphql');
+   
+const schema = new GraphQLSchema({
+    query: new GraphQLObjectType({
+      name: 'RootQueryType',
+      fields: {
+        hello: {
+          type: GraphQLString,
+          resolve() {
+            return 'world';
+          }
+        }
+      }
+    })
+  });
+
+  var query = '{ hello }';
+ 
+  graphql(schema, query).then(result => {
+   
+    // Prints
+    // {
+    //   data: { hello: "world" }
+    // }
+    console.log(result);
+   
+  });
+
 app.post('/api/v1/login', (req, res, next) => {
     const [userName, password] = [req.body['user-name'], req.body.password];
 
