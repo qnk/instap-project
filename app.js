@@ -32,12 +32,22 @@ app.post('/api/v1/login', (req, res, next) => {
     // Retrieve JWT for user
     // res.status(200);
     // res.json({status:200}); 
-req.tokenFromLogin = true;
+    req.tokenFromLogin = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc1Njg5MjcsImV4cCI6MTU4OTEwNDkyNywiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.nIwmdlyhh21hcZiDBejXFzM0CNO7bsg4u-Uu3HWQS3s';;
+    
     next();
 });
 
 app.use('/api/v1/', (req, res, next) => {
-    const tokenFromBody = req.header('authorization');
+    const tokenFromBody = null;
+
+    if(req.header('authorization') != null) {
+        const splitted = req.header('authorization').split(" ");
+
+        if(splitted.length > 0) {
+            const length = splitted.length;
+            tokenFromBody = splitted[length - 1];
+        }
+    }
 
     const token = tokenFromBody || req.tokenFromLogin;
 
@@ -48,7 +58,7 @@ app.use('/api/v1/', (req, res, next) => {
     }        
     console.log(token);
 
-    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc1Njg5MjcsImV4cCI6MTU4OTEwNDkyNywiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.nIwmdlyhh21hcZiDBejXFzM0CNO7bsg4u-Uu3HWQS3s';
+    // const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc1Njg5MjcsImV4cCI6MTU4OTEwNDkyNywiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.nIwmdlyhh21hcZiDBejXFzM0CNO7bsg4u-Uu3HWQS3s';
     const secret = 'qwertyuiopasdfghjklzxcvbnm123456';
     const decoded = jwt.decode(token, secret);
 
