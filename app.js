@@ -11,7 +11,7 @@ const authenticate = require('./middlewares/authentication');
 const clientAuthorization = require('./middlewares/authorization');
 const login = require('./middlewares/login');
 
-const measuresSchema = require('./data/schemas');
+const measuresSchema = require('./schemas/graphql');
 const { historyFromCustomer, measureForADay } = require('./services/measures');
 
 const apiUri = `/api/${process.env.API_VERSION || 'v1'}`;
