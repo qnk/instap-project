@@ -63,14 +63,39 @@ const user = {
   ]
 };
 
-describe('\n** testing all from JWT Controller **', () => {
+xdescribe('\n** testing all from JWT Controller **', () => {
   const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc3NTM1MTYsImV4cCI6MTU4OTI4OTUxNiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.OCX0SdYGnlEutBZe_3_od5Y6UP6zs9nkc5lDs_jA6mo';
   const invalidToken = 'zI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc3NTM1MTYsImV4cCI6MTU4OTI4OTUxNiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.OCX0SdYGnlEutBZe_3_od5Y6UP6zs9nkc5lDs_jA6mo';  
-  
+
+  const nock = require('nock');
+
   it('decodes_a_valid_jwt_with_the_right_secret', () => {
     expect(JwtController.decode(token)).toStrictEqual(user);
   });
   it('fails_when_decodes_an_invalid_jwt', () => {
     expect(JwtController.decode(invalidToken)).toBeFalsy();
+  });
+});
+
+const MeasuresService = require('../services/measures');
+
+describe('\n** testing all from SERVICES **', () => {
+  
+  describe('--- Measures: ', () => {
+    it('returns_valid_measures_for_a_valid_client-id_and_valid_date', () => {
+      expect(MeasuresService({clientId: 1, date: 123456})).toStrictEqual([25, 27.2, 28]);
+    });
+    it('returns_an_empty_array_for_an_unexisting_client-id', () => {
+      expect(MeasuresService({clientId: 99, date: 123456})).toStrictEqual([]);
+    });
+    it('returns_an_empty_array_for_an_unexisting_date', () => {
+      expect(MeasuresService({clientId: 99, date: 824456})).toStrictEqual([]);
+    });
+    it('returns_an_empty_array_for_an_unvalid_client-id', () => {
+      expect(MeasuresService({clientId: 'asd', date: 824456})).toStrictEqual([]);
+    });
+    it('returns_an_empty_array_for_an_unvalid_date', () => {
+      expect(MeasuresService({clientId: 1, date: 'sss'})).toStrictEqual([]);
+    });
   });
 });

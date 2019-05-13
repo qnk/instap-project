@@ -16,12 +16,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 const graphqlHttp = require('express-graphql');
 // const graphqlSchema = require('./graphql/schema');
 // const graphqlResolver = require('./graphql/resolvers');
-const { buildSchema, graphql, GraphQLSchema, GraphQLObjectType, GraphQLString } = require('graphql');
+const { buildSchema/*, graphql, GraphQLSchema, GraphQLObjectType, GraphQLString*/ } = require('graphql');
 
 const measuresSchema = require('./data/schemas');
-const customers = require('./data/customers');
-const CustomerController = require('./controllers/customers');
-const MeasureController = require('./controllers/measures');
+const { historyFromCustomer, measureForADay } = require('./services/measures');
 
 app.use(
   '/graphql',
@@ -29,27 +27,8 @@ app.use(
   graphqlHttp({
     schema: buildSchema(measuresSchema),
     rootValue: {
-      Measures: (clientId) => {
-        const customer = customers.find(customer => customer.id === clientId.clientId);
-
-        if(customer == null || customer.measures == null) return []; 
-
-        return customer.measures;
-      },
-      Measure: (measureQuery) => {
-        const { clientId, date } = measureQuery;
-        // Using graphqlHttp we avoid the need of checking for right values
-
-        const customer = CustomerController.get(clientId);
-
-        if(customer == null || customer.measures == null) return [];
-
-        const measure =  MeasureController.all(customer.measures, date);
-        
-        if(measure == null || measure.values == null) return [];        
-
-        return measure.values;
-      }
+      Measures: (measureQuery) => { return historyFromCustomer(measureQuery.clientId) },
+      Measure: (measureQuery) => { return measureForADay(measureQuery) }
     },
     graphiql: true,
     customFormatErrorFn(err) {

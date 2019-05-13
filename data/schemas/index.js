@@ -4,7 +4,7 @@ const measuresSchema = `
         values: [Float!]
       }
       type RootQuery {
-        Measures(clientId: Int): [Int!]
+        Measures(clientId: Int): [QueryMeasures]
         Measure(clientId: Int, date: Int): [Float!]
       }
       schema {
