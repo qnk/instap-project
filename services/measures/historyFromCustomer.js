@@ -7,3 +7,5 @@ const historyFromCustomer = (clientId) => {
 
     return customer.measures;
 };
+
+module.exports = historyFromCustomer;
