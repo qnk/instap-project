@@ -12,7 +12,8 @@ const clientAuthorization = (req, res, next) => {
     return;
   }
 
-  // For async calls, could be used await and getCustomer() must be a promise or must use async;
+  // For async calls (i. e. for db calls),
+  // could be used await and getCustomer() must be a promise or must use async;
   req.customerId = find(jwt.id);
 
   next();

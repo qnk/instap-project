@@ -9,6 +9,8 @@ const { buildSchema } = require('graphql');
 
 const authenticate = require('./middlewares/authentication');
 const clientAuthorization = require('./middlewares/authorization');
+const login = require('./middlewares/login');
+
 const measuresSchema = require('./data/schemas');
 const { historyFromCustomer, measureForADay } = require('./services/measures');
 
@@ -20,9 +22,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.post(`${apiUri}/login`, login);
+
 app.use(authenticate);
 
-app.use(
+/* TODO */
+// Move buisiness login to their own components.
+app.post(
   `${apiUri}/customers`,
   clientAuthorization,
   graphqlHttp({
@@ -41,23 +47,9 @@ app.use(
   })
 );
 
-// app.post('/api/v1/login', (req, res, next) => {
-//     const [userName, password] = [req.body['user-name'], req.body.password];
-
-//     if(userName == null || password == null) {
-//         res.status(401);
-//         res.json({status:401}); 
-//         return;        
-//     }
-
-//     // Retrieve JWT for user --> TO BE DONE?
-//     // res.status(200);
-//     // res.json({status:200}); 
-// });
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  res.status(err.status || 401).send();
+  res.status(err.status || 404).send();
 });
 
 // error handler
