@@ -4,14 +4,13 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const app = express();
 
+const graphqlHttp = require('express-graphql');
+const { buildSchema } = require('graphql');
+
 const authenticate = require('./middlewares/authentication');
 const clientAuthorization = require('./middlewares/authorization');
-
-const graphqlHttp = require('express-graphql');
 const measuresSchema = require('./data/schemas');
-
 const { historyFromCustomer, measureForADay } = require('./services/measures');
-const { buildSchema } = require('graphql');
 
 app.use(logger('dev'));
 app.use(express.json());

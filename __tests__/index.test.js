@@ -1,9 +1,9 @@
-const getCustomer = require('../controllers/customers').get;
+const getCustomer = require('../controllers/customers').find;
 const customerWithIdOne = {
   "id": 1, "measures": [{"date": 123456, "values": [25, 27.2, 28]}, {"date": 654321, "values": [30]}]
 }
 
-describe('\n** testing getCustomer from CUSTOMER Controller **', () => {
+describe('\n** testing find from CUSTOMER Controller **', () => {
   it('get_the_customer_with_its_measures_from_customer_with_id_1', () => {
     expect(getCustomer(1)).toStrictEqual(customerWithIdOne);
   });
