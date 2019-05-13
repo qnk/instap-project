@@ -1,6 +1,6 @@
 const secret = process.env.SECRET || 'qwertyuiopasdfghjklzxcvbnm123456';
 const jwt = require('jwt-simple');
-const jwtRegexp = /^[A-Za-z0-9-_=]{36}\.[A-Za-z0-9-_=]{303}\.?[A-Za-z0-9-_.+/=]*$/;
+const jwtRegexp = /^[A-Za-z0-9-_=]{36}\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
 
 const JwtController = {
     decode: (token) => {

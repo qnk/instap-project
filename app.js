@@ -4,7 +4,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const app = express();
 
-const auth = require('./middlewares/auth');
+const authenticate = require('./middlewares/authentication');
+const clientAuthorization = require('./middlewares/authorization');
+
 const graphqlHttp = require('express-graphql');
 const measuresSchema = require('./data/schemas');
 
@@ -17,9 +19,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(authenticate);
+app.use(clientAuthorization);
+
 app.use(
-  '/graphql',
-  auth,
+  '/customers',
   graphqlHttp({
     schema: buildSchema(measuresSchema),
     rootValue: {

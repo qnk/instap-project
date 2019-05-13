@@ -8,7 +8,7 @@ const customers = [{
     values: [30]
   }]
 },{
-  id: 2,
+  id: 3,
   measures: [{
     date: 123456,
     values: []

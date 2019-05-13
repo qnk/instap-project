@@ -5,7 +5,7 @@ const measureForADay = (measureQuery) => {
     const { clientId, date } = measureQuery;
     // Using graphqlHttp we avoid the need of checking for right values
   
-    const customer = CustomerController.get(clientId);
+    const customer = CustomerController.find(clientId);
   
     if(customer == null || customer.measures == null) return [];
   
