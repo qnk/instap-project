@@ -2,24 +2,20 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const app = express();
 
 const auth = require('./middlewares/auth');
+const graphqlHttp = require('express-graphql');
+const measuresSchema = require('./data/schemas');
 
-const app = express();
+const { historyFromCustomer, measureForADay } = require('./services/measures');
+const { buildSchema } = require('graphql');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-const graphqlHttp = require('express-graphql');
-// const graphqlSchema = require('./graphql/schema');
-// const graphqlResolver = require('./graphql/resolvers');
-const { buildSchema/*, graphql, GraphQLSchema, GraphQLObjectType, GraphQLString*/ } = require('graphql');
-
-const measuresSchema = require('./data/schemas');
-const { historyFromCustomer, measureForADay } = require('./services/measures');
 
 app.use(
   '/graphql',
