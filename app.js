@@ -3,8 +3,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const _ = require('lodash');
-
 const auth = require('./middlewares/auth');
 
 const app = express();
@@ -18,44 +16,33 @@ app.use(express.static(path.join(__dirname, 'public')));
 const graphqlHttp = require('express-graphql');
 // const graphqlSchema = require('./graphql/schema');
 // const graphqlResolver = require('./graphql/resolvers');
-const { buildSchema } = require('graphql');
-const { graphql, GraphQLSchema, GraphQLObjectType, GraphQLString } = require('graphql');
+const { buildSchema, graphql, GraphQLSchema, GraphQLObjectType, GraphQLString } = require('graphql');
 
+const measuresSchema = require('./data/schemas');
 const customers = require('./data/customers');
+const CustomerController = require('./controllers/customers');
+const MeasureController = require('./controllers/measures');
 
 app.use(
   '/graphql',
   auth,
   graphqlHttp({
-    schema: buildSchema(`
-       type RootQuery {
-        Measures(clientId: Int): [Int!],
-        Measure(clientId: Int, date: Int): [Float!]
-      }
-      schema {
-        query: RootQuery 
-      }
-    `),
+    schema: buildSchema(measuresSchema),
     rootValue: {
       Measures: (clientId) => {
-        const customer = _.filter(customers, { id: clientId.clientId });
+        const customer = customers.find(customer => customer.id === clientId.clientId);
 
-        if(customer.length < 1) {
-          return 0;
-        }
+        if(customer == null || customer.measures == null) return []; 
 
-        const measures =  customer[0].measures;
-        return measures;
+        return customer.measures;
       },
       Measure: (measureQuery) => {
-        const customer = _.filter(customers, { id: measureQuery.clientId });
+        const { clientId, date } = measureQuery;
 
-        if(customer.length < 1) {
-          return 0;
-        }
+        if(clientId == null || date == null) return [];
 
-        const measures =  customer[0].measures;
-        const measure =  _.filter(measures, { date: measureQuery.date })[0];
+        const customer = CustomerController.get(clientId);
+        const measure =  MeasureController.all(customer.measures, date);
         
         return measure.values;
       }
