@@ -12,6 +12,8 @@ const clientAuthorization = require('./middlewares/authorization');
 const measuresSchema = require('./data/schemas');
 const { historyFromCustomer, measureForADay } = require('./services/measures');
 
+const apiUri = `/api/${process.env.API_VERSION || 'v1'}`;
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -19,10 +21,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(authenticate);
-app.use(clientAuthorization);
 
 app.use(
-  '/customers',
+  `${apiUri}/customers`,
+  clientAuthorization,
   graphqlHttp({
     schema: buildSchema(measuresSchema),
     rootValue: {
