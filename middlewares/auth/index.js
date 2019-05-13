@@ -1,6 +1,4 @@
-const jwt = require('jwt-simple');
-
-const secret = process.env.SECRET = 'qwertyuiopasdfghjklzxcvbnm123456';
+const JwtController = require('../../controllers/jwt');
 
 const auth = (req, res, next) => {
   let tokenFromBody = null;
@@ -26,7 +24,7 @@ const auth = (req, res, next) => {
       return;            
   }        
 
-  const decoded = jwt.decode(token, secret);
+  const decoded = JwtController.decode(token);
 
   /* TODO */
   // Check if token is out of date and renew it if so.

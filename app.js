@@ -38,12 +38,16 @@ app.use(
       },
       Measure: (measureQuery) => {
         const { clientId, date } = measureQuery;
-
-        if(clientId == null || date == null) return [];
+        // Using graphqlHttp we avoid the need of checking for right values
 
         const customer = CustomerController.get(clientId);
+
+        if(customer == null || customer.measures == null) return [];
+
         const measure =  MeasureController.all(customer.measures, date);
         
+        if(measure == null || measure.values == null) return [];        
+
         return measure.values;
       }
     },
