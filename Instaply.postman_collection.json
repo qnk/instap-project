@@ -1,0 +1,294 @@
+{
+	"info": {
+		"_postman_id": "3d25f60f-7567-4679-af4d-7ebd2409828d",
+		"name": "Instaply",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Request customer's data NOT as customer as role - id 2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc3NTM1MTYsImV4cCI6MTU4OTI4OTUxNiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.OCX0SdYGnlEutBZe_3_od5Y6UP6zs9nkc5lDs_jA6mo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user-name",
+							"value": "test",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "query",
+							"value": "{ Measure (clientId: 2, date: 123456 )}",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/customers",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"customers"
+					]
+				},
+				"description": "localhost:3000/graphql"
+			},
+			"response": []
+		},
+		{
+			"name": "Request customer's measures with VALID customer role - id 1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc3NzIxMTEsImV4cCI6MTU4OTMwODExMSwiYXVkIjoid3d3Lmluc3RhcGx5LmNvbSIsInN1YiI6ImphcW5rMTBAZ21haWwuY29tIiwiR2l2ZW5OYW1lIjoiSm9zw6kgQW50b25pbyIsIlN1cm5hbWUiOiJDdWVuY2EiLCJFbWFpbCI6ImphcW5rMTBAZ21haWwuY29tIiwiUm9sZSI6IkN1c3RvbWVyIiwiaWQiOiIxIn0.ldF4C3ia_SgZvdY9Ku-F-_YoeCBWWiadZqO65MsQNDg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user-name",
+							"value": "test",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "query",
+							"value": "{ Measure (clientId: 1, date: 123456 )}",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/customers",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"customers"
+					]
+				},
+				"description": "localhost:3000/graphql"
+			},
+			"response": []
+		},
+		{
+			"name": "Request customer's measures with VALID customer role - id 3",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc3NzIxMTEsImV4cCI6MTU4OTMwODExMSwiYXVkIjoid3d3Lmluc3RhcGx5LmNvbSIsInN1YiI6ImNvbnRhY3RAZmFudGFzdGljY28uY29tIiwiR2l2ZW5OYW1lIjoiRmFudGFzdGljIiwiU3VybmFtZSI6IkNvIiwiRW1haWwiOiJjb250YWN0QGZhbnRhc3RpY2NvLmNvbSIsIlJvbGUiOiJDdXN0b21lciIsImlkIjoiMyJ9.1uU55urTRIgEostBEsa2GGAKVZqW-eeB99YjKJczb2A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user-name",
+							"value": "test",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "query",
+							"value": "{ Measure (clientId: 3, date: 654321 )}",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/customers",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"customers"
+					]
+				},
+				"description": "token:\n\neyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc3NzIxMTEsImV4cCI6MTU4OTMwODExMSwiYXVkIjoid3d3Lmluc3RhcGx5LmNvbSIsInN1YiI6ImNvbnRhY3RAZmFudGFzdGljY28uY29tIiwiR2l2ZW5OYW1lIjoiRmFudGFzdGljIiwiU3VybmFtZSI6IkNvIiwiRW1haWwiOiJjb250YWN0QGZhbnRhc3RpY2NvLmNvbSIsIlJvbGUiOiJDdXN0b21lciIsImlkIjoiMyJ9.1uU55urTRIgEostBEsa2GGAKVZqW-eeB99YjKJczb2A"
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user",
+							"value": "1",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request customer's history for VALID customer - id 1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTc3NzIxMTEsImV4cCI6MTU4OTMwODExMSwiYXVkIjoid3d3Lmluc3RhcGx5LmNvbSIsInN1YiI6ImNvbnRhY3RAZmFudGFzdGljY28uY29tIiwiR2l2ZW5OYW1lIjoiRmFudGFzdGljIiwiU3VybmFtZSI6IkNvIiwiRW1haWwiOiJjb250YWN0QGZhbnRhc3RpY2NvLmNvbSIsIlJvbGUiOiJDdXN0b21lciIsImlkIjoiMyJ9.1uU55urTRIgEostBEsa2GGAKVZqW-eeB99YjKJczb2A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user-name",
+							"value": "test",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "query",
+							"value": "{ Measures (clientId: 1 ) { values }}",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/customers",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
