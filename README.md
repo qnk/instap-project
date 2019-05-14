@@ -17,12 +17,37 @@ These are the main techniques of the application:
 Thanks to the use of the previous techniques and modularization, the API scales better and it's easier to test and to maintain.
 
 ## Endpoints
-+ POST to `/login`: To get `authorization_token' as response with a provided user id and a password in the body.
+
+All endpoints (except `/login`) have to authorize first, so must be send the jwt on the `Authorization` header as `Bearer` authentication. The application extract the jwt to authenticate.
+
+This is a list of the endpoints of the app:
++ POST to `/login`: To get `authorization_token' as response with a provided user id and a password in the body. Response is a hardcoded jwt.
 + POST to `/customers`: To get `Measures` with graphql query:
 	+ To get Measures based on clientId and date: Send in the body:
 		query: `{ Measure (clientId: 1, date: 123456 )}`
-		+ To get Measures history based on a clientId: Send in the body:
+	+ To get Measures history based on a clientId: Send in the body:
 		query: `{ Measure (clientId: 1) { values }}`
+  + Responses to these endpoints keep graphql style (maintaining the same format of the query). An example of valid response with 200 status is:
+    `{
+        "data": {
+            "Measures": [
+                {
+                    "values": [
+                        25,
+                        27.2,
+                        28
+                    ]
+                },
+                {
+                    "values": [
+                        30
+                    ]
+                }
+            ]
+        }
+    }`
+
+For more information about requests and responses please, check Postman file.
 
 ## Notes about REST APIs spec
 Currently, there's not any GET route in the API, which is far from the traditional REST specification.
@@ -101,8 +126,13 @@ Traditionally it has being used 404 status code for resource not found, but I've
 + For simplicity and faster development, data have been tested as a 6 length number and is not an POSIX date standard. Should manage the right values in order to manage real dates on the customer which request the information.
 + There are not async functions (apparting from middlewares managed by Express), due to data is stored on a file.
 Include in the `script` method from `package.json` some commands to run depending on the environments. For example, for testing in different environments, could be a `test:dev` script to manage development tests.
++ Should define more headers and apply any kind of basic **cors** protection
++ Tests should not rely on strict comparations of whole objects. They should check object structure to make tests more stable and minimize changes on them. Also should test status responses for HTTP requests.
++ Requests to not valid urls should response with `404` status.
 + Currently,  persistent data structure is minimal and should be improved
-+  Must work on more tests cases
++ Must work on more tests cases. Could not apply 100% tdd due to been starting with tests and with `jest` as modern test library, but I've get experienced now.
++ Not tested with other environments such as `prod`.
++ Based on the requirements, temperature is measured each 15 minutes. Did not add this requirement to schema because could be failed connections so measures could be less values. I decided to not store empty arrays for those cases so requests could be shorter. Could check values length isn't longer than 20.
 + There are other pending functionalities as comments which are marked as `/* TODO */`. In some cases there are some extra expanations.
 
 ## Known issues
