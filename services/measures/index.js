@@ -1,4 +1,11 @@
-const measureForADay = require(__dirname + '\\measureForADay.js');
-const historyFromCustomer = require(__dirname + '\\historyFromCustomer.js');
+const path = require('path');
+
+const measureForADay = require(
+    path.normalize(__dirname + '/measureForADay.js')
+);
+
+const historyFromCustomer = require(
+    path.normalize(__dirname + '/historyFromCustomer.js')
+);
 
 module.exports = { measureForADay, historyFromCustomer };
